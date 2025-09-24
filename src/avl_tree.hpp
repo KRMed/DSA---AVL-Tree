@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <iostream>
 
 class AVLTree {
     private:
@@ -18,6 +20,11 @@ class AVLTree {
         int getHeight(Node* chum) {return chum->height;}
         int getBalance(Node* chum) {return getHeight(chum->leftChild) - getHeight(chum->rightChild);}
         void nodeUpdate(Node* chum) {chum->height = 1 + std::max(getHeight(chum->leftChild), getHeight(chum->rightChild));}
+        
+        // Helper functions (print)
+        void printInOrder(Node* chum, std::vector<std::string>& names);
+        void printPreOrder(Node* chum, std::vector<std::string>& names);
+        void printPostOrder(Node* chum, std::vector<std::string>& names);
 
         // Helper functions (insert)
         Node* insert(Node* chum, std::string name, int id);
