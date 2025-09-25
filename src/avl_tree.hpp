@@ -17,7 +17,7 @@ class AVLTree {
         Node* root;
 
         // Helper functions (others)
-        int getHeight(Node* chum) {return chum->height;}
+        int getHeight(Node* chum);
         int getBalance(Node* chum) {return getHeight(chum->leftChild) - getHeight(chum->rightChild);}
         void nodeUpdate(Node* chum) {chum->height = 1 + std::max(getHeight(chum->leftChild), getHeight(chum->rightChild));}
         

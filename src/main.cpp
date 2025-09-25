@@ -14,7 +14,10 @@ int main(){
 	tree.insert("Grace", 50);
 	tree.insert("Heidi", 5);
 	tree.insert("Ivan", 70);
+	tree.insert("Ivan", 70);
 	tree.printInOrder();
 	tree.printPreOrder();
 	tree.printPostOrder();
+	tree.printLevelCount();
+	return 0;
 }

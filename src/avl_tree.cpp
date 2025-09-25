@@ -21,10 +21,8 @@ AVLTree::Node* AVLTree::insert(Node* chum, std::string name, int id) {
         return chum;
     }
 
-    //nodeUpdate(chum);
-    //return nodeBalance(chum);
-    //for now
-    return chum;
+    nodeUpdate(chum);
+    return balance(chum);
 }
 
 void AVLTree::universalPrint(std::vector<std::string>& names) {
@@ -46,7 +44,9 @@ void AVLTree::printInOrder() {
 }
 
 void AVLTree::printInOrder(Node* chum, std::vector<std::string>& names) {
-    if (!chum) return;
+    if (!chum) {
+        return;
+    }
 
     printInOrder(chum->leftChild, names);
     names.push_back(chum->name);
@@ -62,7 +62,9 @@ void AVLTree::printPreOrder() {
 }
 
 void AVLTree::printPreOrder(Node* chum, std::vector<std::string>& names) {
-    if (!chum) return;
+    if (!chum) {
+        return;
+    }
 
     names.push_back(chum->name);
     printPreOrder(chum->leftChild, names);
@@ -78,11 +80,83 @@ void AVLTree::printPostOrder() {
 }
 
 void AVLTree::printPostOrder(Node* chum, std::vector<std::string>& names) {
-    if (!chum) return;
+    if (!chum) {
+        return;
+    }
 
     printPostOrder(chum->leftChild, names);
     printPostOrder(chum->rightChild, names);
     names.push_back(chum->name);
 
     return;
+}
+
+int AVLTree::getHeight(Node* chum) {
+    if (!chum) return 0;
+    return chum->height;
+}
+
+void AVLTree::printLevelCount() {
+    if (!root) {
+        std::cout << 0 << std::endl;
+        return;
+    }
+    
+    std::cout << getHeight(root) << std::endl;
+}
+
+AVLTree::Node* AVLTree::balance(Node* chum) {
+    int balanceFactor = getBalance(chum);
+
+    if (balanceFactor > 1) {    
+        if (getBalance(chum->leftChild) >= 0) {
+            return rightRotate(chum);
+        } else {
+            return leftRightRotate(chum);
+        }
+    } else if (balanceFactor < -1) {
+        if (getBalance(chum->rightChild) <= 0) {
+            return leftRotate(chum);
+        } else {
+            return rightLeftRotate(chum);
+        }
+    }
+
+    return chum;
+}
+
+AVLTree::Node* AVLTree::leftRotate(Node* chum) {
+    Node* newDad = chum->rightChild;
+    Node* temp = newDad->leftChild;
+
+    newDad->leftChild = chum;
+    chum->rightChild = temp;
+
+    nodeUpdate(chum);
+    nodeUpdate(newDad);
+
+    return newDad;
+}
+
+AVLTree::Node* AVLTree::rightRotate(Node* chum) {
+    Node* newMom = chum->leftChild;
+    Node* temp = newMom->rightChild;
+
+    newMom->rightChild = chum;
+    chum->leftChild = temp;
+
+    nodeUpdate(chum);
+    nodeUpdate(newMom);
+
+    return newMom;
+}
+
+AVLTree::Node* AVLTree::leftRightRotate(Node* chum) {
+    chum->leftChild = leftRotate(chum->leftChild);
+    return rightRotate(chum);
+}
+
+AVLTree::Node* AVLTree::rightLeftRotate(Node* chum) {
+    chum->rightChild = rightRotate(chum->rightChild);
+    return leftRotate(chum);
 }
