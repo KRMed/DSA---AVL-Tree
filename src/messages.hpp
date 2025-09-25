@@ -3,5 +3,5 @@
 
 namespace msg {
     const std::string SUCCESS = "successful.";
-    const std::string UNNSUCCESS = "unsuccessful.";
+    const std::string UNSUCCESS = "unsuccessful.";
 }
