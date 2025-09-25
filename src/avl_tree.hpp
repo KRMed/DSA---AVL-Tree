@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 class AVLTree {
     private:
@@ -20,7 +21,11 @@ class AVLTree {
         int getHeight(Node* chum);
         int getBalance(Node* chum) {return getHeight(chum->leftChild) - getHeight(chum->rightChild);}
         void nodeUpdate(Node* chum) {chum->height = 1 + std::max(getHeight(chum->leftChild), getHeight(chum->rightChild));}
-        
+        Node* searchForName(Node* chum, std::string name);
+        Node* findSuccessor(Node* chum);
+        Node* searchForRemoval(Node* chum, int id);
+        Node* remove(Node* chum, int id);
+
         // Helper functions (print)
         void universalPrint(std::vector<std::string>& names);
         void printInOrder(Node* chum, std::vector<std::string>& names);
@@ -42,8 +47,8 @@ class AVLTree {
         ~AVLTree() { /* do recursive deletion */ } // Destructor to free memory
         void insert(std::string name, int id);
         void remove(int id);
-        Node* search(int id); // Travel recursively through the tree
-        Node* search(std::string name); // Travel recursively through the tree
+        Node* search(int id);
+        Node* search(std::string name); 
         void printInOrder(); 
         void printPreOrder();
         void printPostOrder();

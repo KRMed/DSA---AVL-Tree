@@ -160,3 +160,106 @@ AVLTree::Node* AVLTree::rightLeftRotate(Node* chum) {
     chum->rightChild = rightRotate(chum->rightChild);
     return leftRotate(chum);
 }
+
+AVLTree::Node* AVLTree::search(int id) {
+    Node* curr = root;
+    while (curr) {
+        if (curr->id == id) {
+            std::cout << curr->name << std::endl;
+            return curr;
+        } else if (curr->id < id) {
+            curr = curr->rightChild;
+        } else {
+            curr = curr->leftChild;
+        }
+    }
+
+    std::cout << msg::UNSUCCESS << std::endl;
+    return nullptr;
+}
+
+// using DFS because I read it's better for memory when the tree gets wide
+AVLTree::Node* AVLTree::search(std::string name) {
+    bool found = false;
+    if (!root) {
+        std::cout << msg::UNSUCCESS << std::endl;
+        return nullptr;
+    }
+
+    std::stack<Node*> stack;
+    stack.push(root);
+
+    while (!stack.empty()) {
+        Node* curr = stack.top();
+        stack.pop();
+
+        if (curr->name == name) {
+            std::cout << curr->id << std::endl;
+            found = true;
+        }
+        
+        if (curr->rightChild) {
+            stack.push(curr->rightChild);
+        }
+
+        if (curr->leftChild) {
+            stack.push(curr->leftChild);
+        } 
+    }
+
+    if (!found) {
+        std::cout << msg::UNSUCCESS << std::endl;
+        return nullptr;
+    }
+}
+
+AVLTree::Node* AVLTree::findSuccessor(Node* chum) {
+    if (!chum) {
+        return nullptr;
+    }
+
+    while (chum && chum->leftChild) {
+        chum = chum->leftChild;
+    }
+
+    return chum;
+}
+
+void AVLTree::remove(int id) {
+    root = remove(root, id);
+}
+
+AVLTree::Node* AVLTree::remove(Node* chum, int id) {
+    if (!chum) {
+        std::cout << msg::UNSUCCESS << std::endl;
+        return nullptr;
+    }
+
+    if (chum->id > id) {
+        chum->leftChild = remove(chum->leftChild, id);
+    } else if (chum->id < id) {
+        chum->rightChild = remove(chum->rightChild, id);
+    } else {
+        std::cout << msg::SUCCESS << std::endl;
+        if (!chum->leftChild && !chum->rightChild) {
+            delete chum;
+            return nullptr;
+        } else if (!chum->leftChild) {
+            Node* temp = chum->rightChild;
+            delete chum;
+            return temp;
+        } else if (!chum->rightChild) {
+            Node* temp = chum->leftChild;
+            delete chum;
+            return temp;
+        } else {
+            Node* successor = findSuccessor(chum->rightChild);
+            chum->id = successor->id;
+            chum->name = successor->name;
+            chum->rightChild = remove(chum->rightChild, successor->id);
+        }
+    }
+
+    nodeUpdate(chum);
+    return balance(chum);
+}
