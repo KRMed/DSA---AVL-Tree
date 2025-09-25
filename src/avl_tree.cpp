@@ -27,9 +27,7 @@ AVLTree::Node* AVLTree::insert(Node* chum, std::string name, int id) {
     return chum;
 }
 
-void AVLTree::printInOrder() {
-    std::vector<std::string> names;
-    printInOrder(root, names);
+void AVLTree::universalPrint(std::vector<std::string>& names) {
     for (int i = 0; i < names.size(); i++) {
         std::cout << names[i];
 
@@ -38,6 +36,13 @@ void AVLTree::printInOrder() {
         }
         
     }
+    std::cout << std::endl;
+}
+
+void AVLTree::printInOrder() {
+    std::vector<std::string> names;
+    printInOrder(root, names);
+    universalPrint(names);
 }
 
 void AVLTree::printInOrder(Node* chum, std::vector<std::string>& names) {
@@ -51,6 +56,33 @@ void AVLTree::printInOrder(Node* chum, std::vector<std::string>& names) {
 }
 
 void AVLTree::printPreOrder() {
-    
+    std::vector<std::string> names;
+    printPreOrder(root, names);
+    universalPrint(names);
 }
 
+void AVLTree::printPreOrder(Node* chum, std::vector<std::string>& names) {
+    if (!chum) return;
+
+    names.push_back(chum->name);
+    printPreOrder(chum->leftChild, names);
+    printPreOrder(chum->rightChild, names);
+
+    return;
+}
+
+void AVLTree::printPostOrder() {
+    std::vector<std::string> names;
+    printPostOrder(root, names);
+    universalPrint(names);
+}
+
+void AVLTree::printPostOrder(Node* chum, std::vector<std::string>& names) {
+    if (!chum) return;
+
+    printPostOrder(chum->leftChild, names);
+    printPostOrder(chum->rightChild, names);
+    names.push_back(chum->name);
+
+    return;
+}

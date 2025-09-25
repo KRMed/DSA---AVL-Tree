@@ -22,6 +22,7 @@ class AVLTree {
         void nodeUpdate(Node* chum) {chum->height = 1 + std::max(getHeight(chum->leftChild), getHeight(chum->rightChild));}
         
         // Helper functions (print)
+        void universalPrint(std::vector<std::string>& names);
         void printInOrder(Node* chum, std::vector<std::string>& names);
         void printPreOrder(Node* chum, std::vector<std::string>& names);
         void printPostOrder(Node* chum, std::vector<std::string>& names);
