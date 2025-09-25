@@ -25,6 +25,7 @@ class AVLTree {
         Node* findSuccessor(Node* chum);
         Node* searchForRemoval(Node* chum, int id);
         Node* remove(Node* chum, int id);
+        Node* removeInOrderN(Node* chum, int& n);
 
         // Helper functions (print)
         void universalPrint(std::vector<std::string>& names);

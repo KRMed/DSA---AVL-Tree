@@ -263,3 +263,29 @@ AVLTree::Node* AVLTree::remove(Node* chum, int id) {
     nodeUpdate(chum);
     return balance(chum);
 }
+
+void AVLTree::removeInOrderN(int n) {
+    Node* temp = removeInOrderN(root, n);
+    if (temp) {
+        root = remove(root, temp->id);
+    }
+}
+
+AVLTree::Node* AVLTree::removeInOrderN(Node* chum, int& n) {
+    if (!chum) {
+        return nullptr;
+    }
+
+    Node* curr = removeInOrderN(chum->leftChild, n);
+
+    if (curr) {
+        return curr;
+    } 
+    
+    if (n == 0) {
+        return chum;
+    }
+
+    n--;
+    return removeInOrderN(chum->rightChild, n);
+}
