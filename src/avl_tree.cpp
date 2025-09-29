@@ -241,6 +241,23 @@ AVLTree::Node* AVLTree::remove(Node* chum, int id) {
         chum->rightChild = remove(chum->rightChild, id);
     } else {
         std::cout << msg::SUCCESS << std::endl;
+        return removeHelper(chum, id);
+    }
+
+    nodeUpdate(chum);
+    return balance(chum);
+}
+
+AVLTree::Node* AVLTree::removeHelper(Node* chum, int id) {
+    if (!chum) {
+        return nullptr;
+    }
+
+    if (chum->id > id) {
+        chum->leftChild = removeHelper(chum->leftChild, id);
+    } else if (chum->id < id) {
+        chum->rightChild = removeHelper(chum->rightChild, id);
+    } else {
         if (!chum->leftChild && !chum->rightChild) {
             delete chum;
             return nullptr;
@@ -256,7 +273,7 @@ AVLTree::Node* AVLTree::remove(Node* chum, int id) {
             Node* successor = findSuccessor(chum->rightChild);
             chum->id = successor->id;
             chum->name = successor->name;
-            chum->rightChild = remove(chum->rightChild, successor->id);
+            chum->rightChild = removeHelper(chum->rightChild, successor->id);
         }
     }
 
@@ -264,19 +281,19 @@ AVLTree::Node* AVLTree::remove(Node* chum, int id) {
     return balance(chum);
 }
 
-void AVLTree::removeInOrderN(int n) {
-    Node* temp = removeInOrderN(root, n);
+void AVLTree::removeInOrder(int n) {
+    Node* temp = removeInOrder(root, n);
     if (temp) {
         root = remove(root, temp->id);
     }
 }
 
-AVLTree::Node* AVLTree::removeInOrderN(Node* chum, int& n) {
+AVLTree::Node* AVLTree::removeInOrder(Node* chum, int& n) {
     if (!chum) {
         return nullptr;
     }
 
-    Node* curr = removeInOrderN(chum->leftChild, n);
+    Node* curr = removeInOrder(chum->leftChild, n);
 
     if (curr) {
         return curr;
@@ -287,5 +304,5 @@ AVLTree::Node* AVLTree::removeInOrderN(Node* chum, int& n) {
     }
 
     n--;
-    return removeInOrderN(chum->rightChild, n);
+    return removeInOrder(chum->rightChild, n);
 }
